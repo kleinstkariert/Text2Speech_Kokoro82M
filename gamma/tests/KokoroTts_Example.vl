@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Document xmlns:p="property" xmlns:r="reflection" Id="KokoTtsExDoc01" LanguageVersion="2025.7.2" Version="0.128">
+  <NugetDependency Id="OLC6N676ENuMv87XN8XceD" Location="VL.CoreLib" Version="2025.7.2" />
+  <Patch Id="PSnKokoExample01">
+    <Canvas Id="F21KokoCanvas01" DefaultCategory="Main" BordersChecked="false" CanvasType="FullCategory" />
+    <!--
+
+    ************************ Application ************************
+
+    Offline Kokoro-82M TTS example.
+    1. scripts\install_gamma.ps1  (quit Gamma first)
+    2. Dependencies -&gt; Files -&gt; lib\VL.Text2Speech.Kokoro.dll
+    3. Bang Load, wait until Is Ready, then bang Speak.
+
+-->
+    <Node Name="Application" Bounds="100,100" Id="AppKokoTtsExample1">
+      <p:NodeReference>
+        <Choice Kind="ContainerDefinition" Name="Process" />
+        <CategoryReference Kind="Category" Name="Primitive" />
+      </p:NodeReference>
+      <Patch Id="PatKokoAppInner01">
+        <Canvas Id="CanKokoAppGroup01" CanvasType="Group">
+          <Node Bounds="120,200,240,19" Id="NodeKokoroTts01">
+            <p:NodeReference LastCategoryFullName="Text2Speech" LastDependency="VL.Text2Speech.Kokoro.dll">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <Choice Kind="ProcessAppFlag" Name="KokoroTts" />
+            </p:NodeReference>
+            <Pin Id="PinIsReady" Name="Is Ready" Kind="OutputPin" />
+            <Pin Id="PinIsLoading" Name="Is Loading" Kind="OutputPin" />
+            <Pin Id="PinIsSpeaking" Name="Is Speaking" Kind="OutputPin" />
+            <Pin Id="PinSampleRate" Name="Sample Rate" Kind="OutputPin" />
+            <Pin Id="PinVoices" Name="Voices" Kind="OutputPin" />
+            <Pin Id="PinStatus" Name="Status" Kind="OutputPin" />
+            <Pin Id="PinError" Name="Error" Kind="OutputPin" />
+            <Pin Id="PinLastSpoken" Name="Last Spoken" Kind="OutputPin" />
+            <Pin Id="PinLastWavPath" Name="Last Wav Path" Kind="OutputPin" />
+            <Pin Id="PinText" Name="Text" Kind="InputPin" />
+            <Pin Id="PinVoice" Name="Voice" Kind="InputPin" />
+            <Pin Id="PinSpeed" Name="Speed" Kind="InputPin" />
+            <Pin Id="PinModelPath" Name="Model Path" Kind="InputPin" />
+            <Pin Id="PinWavPath" Name="Wav Path" Kind="InputPin" />
+            <Pin Id="PinLoad" Name="Load" Kind="InputPin" />
+            <Pin Id="PinSpeak" Name="Speak" Kind="InputPin" />
+            <Pin Id="PinSaveWav" Name="Save Wav" Kind="InputPin" />
+            <Pin Id="PinStop" Name="Stop" Kind="InputPin" />
+            <Pin Id="PinEnabled" Name="Enabled" Kind="InputPin" />
+          </Node>
+          <Pad Id="PadText" Comment="Text" Bounds="420,80,420,60" ShowValueBox="true" isIOBox="true" Value="Hello from Kokoro. This is offline text to speech running in Gamma.">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="TypeFlag" Name="String" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Pad Id="PadVoice" Comment="Voice (af_heart, am_michael, bf_emma, …)" Bounds="420,160,160,15" ShowValueBox="true" isIOBox="true" Value="af_heart">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="TypeFlag" Name="String" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Pad Id="PadSpeed" Comment="Speed (0.5–1.3)" Bounds="420,190,44,15" ShowValueBox="true" isIOBox="true" Value="1">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="TypeFlag" Name="Float32" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Pad Id="PadModelPath" Comment="Model Path (empty = models\kokoro-fp16.onnx)" Bounds="420,220,420,15" ShowValueBox="true" isIOBox="true" Value="..\..\models\kokoro-fp16.onnx">
+            <p:TypeAnnotation LastCategoryFullName="IO" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="TypeFlag" Name="Path" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Pad Id="PadWavPath" Comment="Wav Path (optional Save Wav)" Bounds="420,250,420,15" ShowValueBox="true" isIOBox="true" Value="..\..\artifacts\hello_kokoro.wav">
+            <p:TypeAnnotation LastCategoryFullName="IO" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="TypeFlag" Name="Path" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Pad Id="PadLoad" Comment="Load" Bounds="420,290,35,35" ShowValueBox="true" isIOBox="true" Value="false">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
+            </p:TypeAnnotation>
+            <p:ValueBoxSettings>
+              <p:buttonmode p:Assembly="VL.UI.Forms" p:Type="VL.HDE.PatchEditor.Editors.ButtonModeEnum">Bang</p:buttonmode>
+            </p:ValueBoxSettings>
+          </Pad>
+          <Pad Id="PadSpeak" Comment="Speak" Bounds="470,290,35,35" ShowValueBox="true" isIOBox="true" Value="false">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
+            </p:TypeAnnotation>
+            <p:ValueBoxSettings>
+              <p:buttonmode p:Assembly="VL.UI.Forms" p:Type="VL.HDE.PatchEditor.Editors.ButtonModeEnum">Bang</p:buttonmode>
+            </p:ValueBoxSettings>
+          </Pad>
+          <Pad Id="PadSaveWav" Comment="Save Wav" Bounds="520,290,35,35" ShowValueBox="true" isIOBox="true" Value="false">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
+            </p:TypeAnnotation>
+            <p:ValueBoxSettings>
+              <p:buttonmode p:Assembly="VL.UI.Forms" p:Type="VL.HDE.PatchEditor.Editors.ButtonModeEnum">Bang</p:buttonmode>
+            </p:ValueBoxSettings>
+          </Pad>
+          <Pad Id="PadStop" Comment="Stop" Bounds="570,290,35,35" ShowValueBox="true" isIOBox="true" Value="false">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
+            </p:TypeAnnotation>
+            <p:ValueBoxSettings>
+              <p:buttonmode p:Assembly="VL.UI.Forms" p:Type="VL.HDE.PatchEditor.Editors.ButtonModeEnum">Bang</p:buttonmode>
+            </p:ValueBoxSettings>
+          </Pad>
+          <Pad Id="PadEnabled" Comment="Enabled" Bounds="620,290,35,15" ShowValueBox="true" isIOBox="true" Value="true">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Pad Id="PadStatus" Comment="Status" Bounds="120,250,320,15" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="PadError" Comment="Error" Bounds="120,280,320,15" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="PadIsReady" Comment="Is Ready" Bounds="120,310,35,15" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="PadIsLoading" Comment="Is Loading" Bounds="180,310,35,15" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="PadIsSpeaking" Comment="Is Speaking" Bounds="250,310,35,15" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="PadVoices" Comment="Voices" Bounds="120,350,200,120" ShowValueBox="true" isIOBox="true" />
+        </Canvas>
+        <Patch Id="PatKokoCreate01" Name="Create" />
+        <Patch Id="PatKokoUpdate01" Name="Update" />
+        <ProcessDefinition Id="PrcKokoAppDef01">
+          <Fragment Id="FrgKokoCreate01" Patch="PatKokoCreate01" Enabled="true" />
+          <Fragment Id="FrgKokoUpdate01" Patch="PatKokoUpdate01" Enabled="true" />
+        </ProcessDefinition>
+        <Link Id="LnkText" Ids="PadText,PinText" />
+        <Link Id="LnkVoice" Ids="PadVoice,PinVoice" />
+        <Link Id="LnkSpeed" Ids="PadSpeed,PinSpeed" />
+        <Link Id="LnkModelPath" Ids="PadModelPath,PinModelPath" />
+        <Link Id="LnkWavPath" Ids="PadWavPath,PinWavPath" />
+        <Link Id="LnkLoad" Ids="PadLoad,PinLoad" />
+        <Link Id="LnkSpeak" Ids="PadSpeak,PinSpeak" />
+        <Link Id="LnkSaveWav" Ids="PadSaveWav,PinSaveWav" />
+        <Link Id="LnkStop" Ids="PadStop,PinStop" />
+        <Link Id="LnkEnabled" Ids="PadEnabled,PinEnabled" />
+        <Link Id="LnkStatusOut" Ids="PinStatus,PadStatus" />
+        <Link Id="LnkErrorOut" Ids="PinError,PadError" />
+        <Link Id="LnkReadyOut" Ids="PinIsReady,PadIsReady" />
+        <Link Id="LnkLoadingOut" Ids="PinIsLoading,PadIsLoading" />
+        <Link Id="LnkSpeakingOut" Ids="PinIsSpeaking,PadIsSpeaking" />
+        <Link Id="LnkVoicesOut" Ids="PinVoices,PadVoices" />
+      </Patch>
+    </Node>
+  </Patch>
+  <PlatformDependency Id="DepKokoTtsDll01" Location="../../lib/VL.Text2Speech.Kokoro.dll" />
+</Document>

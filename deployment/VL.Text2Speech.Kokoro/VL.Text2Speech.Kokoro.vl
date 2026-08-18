@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Document xmlns:p="property" xmlns:r="reflection" Id="KokoroTtsLib" LanguageVersion="2025.7.2" Version="0.128">
+  <NugetDependency Id="CoreLib" Location="VL.CoreLib" Version="2025.7.2" />
+  <Patch Id="KokoroTtsPatch">
+    <Canvas Id="KokoroTtsCanvas" DefaultCategory="Text2Speech" CanvasType="FullCategory" />
+  </Patch>
+  <PlatformDependency Id="KokoroTtsLibDep1" Location="./lib/net8.0-windows7.0/VL.Text2Speech.Kokoro.dll" IsForward="true" />
+</Document>

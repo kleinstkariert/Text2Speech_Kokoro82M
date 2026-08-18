@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>VL.Text2Speech.Kokoro</id>
+    <version>0.1.0-alpha</version>
+    <title>VL.Text2Speech.Kokoro — offline Kokoro-82M TTS</title>
+    <authors>kleinstkariert, QUADRATURE</authors>
+    <owners>kleinstkariert</owners>
+    <projectUrl>https://github.com/kleinstkariert/Text2Speech_Kokoro82M</projectUrl>
+    <repository type="git" url="https://github.com/kleinstkariert/Text2Speech_Kokoro82M" />
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Offline near-real-time text-to-speech for vvvv Gamma 7.2 using KokoroSharp + Kokoro-82M (ONNX). File-reference the deployed DLL; do not add as a VL NuGet until Gamma package precompile is proven.</description>
+    <tags>VL vvvv gamma tts kokoro onnx speech schaufler</tags>
+    <license type="expression">MIT</license>
+    <readme>docs\README.md</readme>
+  </metadata>
+  <files>
+    <file src="lib\net8.0-windows7.0\**" target="lib\net8.0-windows7.0\" />
+    <file src="VL.Text2Speech.Kokoro.vl" target="" />
+    <file src="docs\README.md" target="docs\" />
+  </files>
+</package>

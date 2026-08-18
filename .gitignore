@@ -1,0 +1,55 @@
+# Build outputs
+bin/
+obj/
+out/
+build/
+artifacts/
+deployment/output/
+deployment/VL.Text2Speech.Kokoro/lib/
+
+# Deployed Gamma binaries (rebuilt by scripts/build_deploy.ps1)
+lib/*.dll
+lib/*.pdb
+lib/*.xml
+lib/*.deps.json
+lib/*.config
+lib/runtimes/
+lib/voices/
+lib/espeak/
+lib/espeak-ng-data/
+
+# Large ONNX weights (download via scripts/download_model.ps1)
+models/*.onnx
+models/*.onnx.tmp
+
+# Tools
+tools/**/bin/
+tools/**/obj/
+
+*.exe
+*.dll
+*.pdb
+*.cache
+*.nupkg
+*.snupkg
+
+# Visual Studio / .NET
+.vs/
+*.user
+*.suo
+
+# vvvv gamma
+*.vl.doc
+*.autosave
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+
+# Local / large data dumps
+artifacts/*.wav
+artifacts/*.onnx
+.env
+*.env
