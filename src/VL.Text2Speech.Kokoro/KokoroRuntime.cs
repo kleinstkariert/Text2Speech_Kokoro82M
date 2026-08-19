@@ -89,8 +89,18 @@ static class KokoroRuntime
 
     internal static string ResolveVoicesPath(string? requested)
     {
-        if (!string.IsNullOrWhiteSpace(requested) && Directory.Exists(requested))
-            return Path.GetFullPath(requested);
+        if (!string.IsNullOrWhiteSpace(requested))
+        {
+            if (Directory.Exists(requested))
+                return Path.GetFullPath(requested);
+            // User linked a file inside the voices folder — use its parent directory
+            if (File.Exists(requested))
+            {
+                var parent = Path.GetDirectoryName(requested);
+                if (!string.IsNullOrEmpty(parent) && Directory.Exists(parent))
+                    return Path.GetFullPath(parent);
+            }
+        }
 
         return VoicesDirectory;
     }

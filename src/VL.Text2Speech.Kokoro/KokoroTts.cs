@@ -82,19 +82,23 @@ public sealed class KokoroTts : IDisposable
             this.isSpeaking = false;
         }
 
+        var modelStr = modelPath?.ToString() ?? "";
+        var voicesStr = voicesPath?.ToString() ?? "";
+        var wavStr = wavPath?.ToString() ?? "";
+
         if (loadBang && loadTask is not { IsCompleted: false })
         {
-            StartLoad(modelPath.ToString(), voicesPath.ToString());
+            StartLoad(modelStr, voicesStr);
         }
         else if (!autoLoadStarted && tts is null && loadTask is null)
         {
             autoLoadStarted = true;
-            StartLoad(modelPath.ToString(), voicesPath.ToString());
+            StartLoad(modelStr, voicesStr);
         }
 
         if (saveBang && speakTask is not { IsCompleted: false })
         {
-            StartSaveWav(text, voice, speed, newLinePause, wavPath.ToString());
+            StartSaveWav(text, voice, speed, newLinePause, wavStr);
         }
         else if (speakBang && speakTask is not { IsCompleted: false })
         {
