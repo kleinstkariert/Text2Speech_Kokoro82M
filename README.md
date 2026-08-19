@@ -6,75 +6,89 @@ Offline near-real-time text-to-speech for **vvvv Gamma 7.2**, using [KokoroSharp
 
 ---
 
-## Dummy install tutorial
+## Dummy install tutorial (step by step)
 
-Follow this once on a machine that has never seen the project.
+Follow this **exactly once** on a fresh PC that has never seen the project. Every step tells you what to click and what to type.
 
-### What you need
+### What you need before you start
 
-| Item | Required? | Notes |
-|------|-----------|--------|
-| Windows 10/11 x64 | Yes | Gamma 7.2 is Win-x64 |
-| [vvvv Gamma 7.2](https://visualprogramming.net/) | Yes | Confirmed: `vvvv_gamma_7.2-win-x64` |
-| [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) | Yes | To build `VL.Text2Speech.Kokoro` |
-| This repo | Yes | Clone or unzip `Text2Speech_Kokoro82M` |
-| Internet, first time only | Once | Downloads `kokoro-fp16.onnx` (~156 MB) |
-| GPU | No | CPU path (`KokoroSharp.CPU`) is what we ship |
+| Item | Required? | Where to get it |
+|------|-----------|-----------------|
+| Windows 10/11 x64 | Yes | — |
+| [vvvv Gamma 7.2](https://visualprogramming.net/) | Yes | Download from visualprogramming.net, run installer |
+| [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) | Yes | Download the **SDK** (not Runtime), run installer |
+| [Git for Windows](https://git-scm.com/download/win) | Yes | Download, run installer (keep defaults) |
+| Internet | Once | Downloads the ONNX model (~156 MB) on first run |
+| GPU | No | Runs on CPU only |
 
-You do **not** need Azure, Edge, API keys, or Python for English. German pack conversion uses Python once (`scripts\download_german_pack.ps1`).
+You do **not** need Azure, Edge, API keys, or Python for English.
 
-### 1. Get the repo
+### 1. Clone the repo
+
+1. Press **Win + R**, type `powershell`, press Enter. A blue/black terminal window opens.
+2. Pick a folder where you want the project. For example your Desktop:
+   ```powershell
+   cd ~\Desktop
+   ```
+3. Clone (= download) the repository:
+   ```powershell
+   git clone https://github.com/kleinstkariert/Text2Speech_Kokoro82M.git
+   ```
+   This creates a folder `Text2Speech_Kokoro82M` (~150 MB download).
+4. Go into the folder:
+   ```powershell
+   cd Text2Speech_Kokoro82M
+   ```
+
+If you already have the folder from a USB stick or Nextcloud, just `cd` into it instead of cloning.
+
+### 2. Close Gamma
+
+Close **all** vvvv Gamma windows before continuing. The next step rebuilds DLLs, and Gamma locks them while running.
+
+### 3. Download the ONNX model and build
+
+Still in the **same PowerShell window** (you should see `Text2Speech_Kokoro82M` in the prompt), type:
 
 ```powershell
-cd C:\Users\sebas\Nextcloud\_QUADRATURE\01_PROJECTS\01_Current\2026_Schaufler\_Dev
-git clone https://github.com/kleinstkariert/Text2Speech_Kokoro82M.git
-cd Text2Speech_Kokoro82M
+.\scripts\install_gamma.ps1
 ```
 
-If you already have the folder, `cd` into it instead.
+> **If you get a red error about "execution policy":** run this once and answer **Y**:
+> ```powershell
+> Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+> ```
+> Then try `.\scripts\install_gamma.ps1` again.
 
-### 2. Quit Gamma
+What the script does automatically:
+1. Downloads `kokoro-fp16.onnx` (~156 MB) from [KokoroSharpBinaries](https://github.com/Lyrcaxis/KokoroSharpBinaries/releases/download/v2.0.0/kokoro-fp16.onnx) into the `models\` folder
+2. Builds `VL.Text2Speech.Kokoro.dll`
+3. Copies everything into `lib\`
 
-Close **all** vvvv Gamma windows. The build copies DLLs into `lib\` and Gamma locks them if it is open.
+Wait until the script finishes (you see the PowerShell prompt `>` again, no errors in red).
 
-### 3. Download the model and build the library
+**Optional quick test** (without Gamma): type `.\scripts\smoke_tts.ps1` — it writes `artifacts\hello_kokoro.wav`. Play that file to verify TTS works.
 
-```powershell
-scripts\install_gamma.ps1
-```
+### 4. Open the example in Gamma
 
-This:
+1. Start **vvvv Gamma 7.2** normally
+2. In Gamma: **File → Open** → navigate to `Text2Speech_Kokoro82M\gamma\tests\KokoroTts_Example.vl` → Open
+3. If Gamma asks about dependencies, accept/confirm
+4. Wait a few seconds until the **Is Ready** output turns **true** (model auto-loads on start)
+5. Bang **Speak** — audio plays from the default Windows audio device
+6. Optional: bang **Save Wav** to save the audio to a `.wav` file
 
-1. Downloads `models\kokoro-fp16.onnx` if missing
-2. Builds `VL.Text2Speech.Kokoro`
-3. Copies the main DLL **and** runtime files into `lib\` (`KokoroSharp.dll`, `MisakiSharp.dll`, `onnxruntime.dll`, `lib\voices\`, …)
+Default voice: `af_heart`. Other names appear on the **Voices** output pin (`am_michael`, `bf_emma`, …).
 
-Optional check (no Gamma): `scripts\smoke_tts.ps1` writes `artifacts\hello_kokoro.wav`.
+### If the example patch doesn't find the node
 
-### 4. Add the library in Gamma (file reference)
+If the `KokoroTts` node shows red or is missing:
 
-Start Gamma **normally**. Open a new document or `gamma\tests\KokoroTts_Example.vl`.
+1. In Gamma: **Dependencies → Files → Add Existing**
+2. Navigate to `Text2Speech_Kokoro82M\lib\VL.Text2Speech.Kokoro.dll` → select it
+3. Do **not** move or copy only that DLL — everything in `lib\` must stay together
 
-1. **Dependencies → Files → Add Existing**
-2. Select  
-   `…\Text2Speech_Kokoro82M\lib\VL.Text2Speech.Kokoro.dll`
-3. Leave **every** other file in `lib\` next to that DLL. Do not copy only the main DLL.
-
-Node browser → category **Text2Speech** → `KokoroTts`.
-
-**Do not** use **Dependencies → VL Nugets → VL.Text2Speech.Kokoro**. That install path is broken in this project (same `__AdaptiveImplementations__` issue as VL.NBody.CUDA). It can also break **RandomSpread**. If that happens: quit Gamma, remove the NuGet dependency, restart, confirm RandomSpread, then add the DLL via Files again.
-
-### 5. Use the example patch
-
-Open `gamma\tests\KokoroTts_Example.vl`.
-
-1. Wait until **Is Ready** is true (the model **auto-loads** on start; first load takes several seconds and includes a silent warmup)
-2. Edit **Text** if you want
-3. Bang **Speak** — audio plays from the default Windows device
-4. Optional: bang **Save Wav** to write the path in **Wav Path**
-5. Bang **Load** only when you change **Model Path** or **Voices Path** (English ↔ German packs)
-
-Default voice: `af_heart`. Other names are on the **Voices** output (`am_michael`, `bf_emma`, …).
+**Do not** use **Dependencies → VL Nugets → VL.Text2Speech.Kokoro**. That install path is broken (same `__AdaptiveImplementations__` issue as VL.NBody.CUDA). It can also break **RandomSpread**. If that happens: quit Gamma, remove the NuGet dependency, restart.
 
 **New Line Pause** (seconds): silence after a `\n`. KokoroSharp default is 0.5 s, which feels long on stage; the node defaults to **0.12**. Set `0` for no extra gap. After a rebuild, create an IO box on that pin if it is not wired yet.
 
