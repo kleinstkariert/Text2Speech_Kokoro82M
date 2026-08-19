@@ -7,16 +7,8 @@ artifacts/
 deployment/output/
 deployment/VL.Text2Speech.Kokoro/lib/
 
-# Deployed Gamma binaries (rebuilt by scripts/build_deploy.ps1)
-lib/*.dll
+# Deployed Gamma binaries – track everything in lib/ except PDB (debug symbols)
 lib/*.pdb
-lib/*.xml
-lib/*.deps.json
-lib/*.config
-lib/runtimes/
-lib/voices/
-lib/espeak/
-lib/espeak-ng-data/
 
 # Large ONNX weights (download via scripts/download_model.ps1 / download_german_pack.ps1)
 models/*.onnx
@@ -31,9 +23,6 @@ models/espeak-extract/
 tools/**/bin/
 tools/**/obj/
 
-*.exe
-*.dll
-*.pdb
 *.cache
 *.nupkg
 *.snupkg
