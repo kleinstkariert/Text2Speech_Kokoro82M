@@ -10,7 +10,8 @@ public sealed class KokoroVoiceList
     {
         try
         {
-            KokoroRuntime.EnsureVoicesLoaded();
+            if (KokoroVoiceManager.Voices.Count == 0)
+                KokoroRuntime.EnsureVoicesLoaded();
             var names = KokoroVoiceManager.Voices
                 .Select(v => v.Name)
                 .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)

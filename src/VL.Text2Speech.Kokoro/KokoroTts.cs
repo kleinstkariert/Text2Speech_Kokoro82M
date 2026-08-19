@@ -14,12 +14,14 @@ public sealed class KokoroTts : IDisposable
     KokoroTTS? tts;
     string loadedModelPath = "";
     string error = "";
-    string status = "Idle. Bang Load.";
+    string status = "Loading Kokoro-82M…";
     string lastSpoken = "";
     string lastWavPath = "";
     bool isReady;
     bool isLoading;
     bool isSpeaking;
+    bool autoLoadStarted;
+    bool playbackActive;
     bool prevLoad;
     bool prevSpeak;
     bool prevStop;
@@ -40,7 +42,9 @@ public sealed class KokoroTts : IDisposable
         string text = "Hello from Kokoro.",
         string voice = KokoroRuntime.DefaultVoice,
         float speed = KokoroRuntime.DefaultSpeed,
+        float newLinePause = KokoroRuntime.DefaultNewLinePause,
         VL.Lib.IO.Path modelPath = default!,
+        VL.Lib.IO.Path voicesPath = default!,
         VL.Lib.IO.Path wavPath = default!,
         bool load = false,
         bool speak = false,
@@ -73,28 +77,34 @@ public sealed class KokoroTts : IDisposable
         if (stopBang)
         {
             TryStop();
+            playbackActive = false;
             this.status = "Stopped.";
             this.isSpeaking = false;
         }
 
         if (loadBang && loadTask is not { IsCompleted: false })
         {
-            StartLoad(modelPath.ToString());
+            StartLoad(modelPath.ToString(), voicesPath.ToString());
+        }
+        else if (!autoLoadStarted && tts is null && loadTask is null)
+        {
+            autoLoadStarted = true;
+            StartLoad(modelPath.ToString(), voicesPath.ToString());
         }
 
         if (saveBang && speakTask is not { IsCompleted: false })
         {
-            StartSaveWav(text, voice, speed, wavPath.ToString());
+            StartSaveWav(text, voice, speed, newLinePause, wavPath.ToString());
         }
         else if (speakBang && speakTask is not { IsCompleted: false })
         {
-            StartSpeak(text, voice, speed);
+            StartSpeak(text, voice, speed, newLinePause);
         }
 
-        if (loadTask is { IsCompleted: false })
-            this.isLoading = true;
-        if (speakTask is { IsCompleted: false })
-            this.isSpeaking = true;
+        this.isLoading = loadTask is { IsCompleted: false };
+        this.isSpeaking = speakTask is { IsCompleted: false } || playbackActive;
+        if (!this.isSpeaking && this.status == "Speaking…")
+            this.status = "Spoken.";
 
         Assign(out isReady, out isLoading, out isSpeaking, out status, out error, out lastSpoken, out lastWavPath);
     }
@@ -117,37 +127,49 @@ public sealed class KokoroTts : IDisposable
         lastWavPath = this.lastWavPath;
     }
 
-    void StartLoad(string requestedPath)
+    void StartLoad(string requestedPath, string requestedVoices)
     {
         this.isReady = false;
         this.isLoading = true;
         this.error = "";
-        this.status = "Loading Kokoro-82M…";
+        this.status = "Loading Kokoro pack…";
         var path = KokoroRuntime.ResolveModelPath(requestedPath);
-        loadTask = Task.Run(() => LoadEngine(path));
+        var voices = KokoroRuntime.ResolveVoicesPath(requestedVoices);
+        loadTask = Task.Run(() => LoadEngine(path, voices));
     }
 
-    void LoadEngine(string path)
+    void LoadEngine(string path, string voicesDir)
     {
         if (!File.Exists(path))
         {
             throw new FileNotFoundException(
-                "ONNX model not found. Run scripts\\download_model.ps1. Expected: " + path, path);
+                "ONNX model not found. English: scripts\\download_model.ps1. German: scripts\\download_german_pack.ps1. Expected: " + path, path);
         }
 
-        KokoroRuntime.EnsureVoicesLoaded();
+        KokoroRuntime.ReplaceVoices(voicesDir);
         var engine = KokoroTTS.LoadModel(path);
+        Warmup(engine);
         var previous = tts;
         tts = engine;
         loadedModelPath = path;
         previous?.Dispose();
     }
 
-    void StartSpeak(string text, string voiceName, float speed)
+    static void Warmup(KokoroTTS engine)
+    {
+        var voice = KokoroRuntime.ResolveVoice(KokoroRuntime.DefaultVoice);
+        var tokens = KokoroRuntime.TokenizeForVoice("Hi.", voice);
+        var done = new TaskCompletionSource();
+        engine.EnqueueJob(KokoroJob.Create(tokens, voice, 1f, _ => done.TrySetResult()));
+        if (!done.Task.Wait(TimeSpan.FromSeconds(60)))
+            throw new TimeoutException("Kokoro warmup inference timed out.");
+    }
+
+    void StartSpeak(string text, string voiceName, float speed, float newLinePause)
     {
         if (tts is null || !isReady)
         {
-            error = "Model not loaded. Bang Load first.";
+            error = "Model not loaded yet. Wait for Is Ready, or bang Load to retry / switch models.";
             status = error;
             return;
         }
@@ -163,13 +185,14 @@ public sealed class KokoroTts : IDisposable
         var snapshot = text;
         var voice = voiceName;
         var spd = speed;
+        var linePause = newLinePause;
         isSpeaking = true;
         error = "";
         status = "Speaking…";
-        speakTask = Task.Run(() => SpeakOnEngine(engine, snapshot, voice, spd, saveWav: false, wavOut: ""));
+        speakTask = Task.Run(() => SpeakOnEngine(engine, snapshot, voice, spd, linePause, saveWav: false, wavOut: ""));
     }
 
-    void StartSaveWav(string text, string voiceName, float speed, string wavOut)
+    void StartSaveWav(string text, string voiceName, float speed, float newLinePause, string wavOut)
     {
         if (string.IsNullOrWhiteSpace(wavOut))
         {
@@ -181,7 +204,7 @@ public sealed class KokoroTts : IDisposable
         var path = KokoroRuntime.ResolveModelPath(loadedModelPath);
         if (!File.Exists(path) && tts is null)
         {
-            error = "Model not loaded. Bang Load first.";
+            error = "Model not loaded yet. Wait for Is Ready, or bang Load to retry / switch models.";
             status = error;
             return;
         }
@@ -189,12 +212,13 @@ public sealed class KokoroTts : IDisposable
         var snapshot = text;
         var voice = voiceName;
         var spd = speed;
+        var linePause = newLinePause;
         var outPath = wavOut;
         isSpeaking = true;
         error = "";
         status = "Writing WAV…";
         var modelPath = string.IsNullOrEmpty(loadedModelPath) ? path : loadedModelPath;
-        speakTask = Task.Run(() => SpeakOnEngine(tts, snapshot, voice, spd, saveWav: true, wavOut: outPath, modelPathForWav: modelPath));
+        speakTask = Task.Run(() => SpeakOnEngine(tts, snapshot, voice, spd, linePause, saveWav: true, wavOut: outPath, modelPathForWav: modelPath));
     }
 
     void SpeakOnEngine(
@@ -202,38 +226,41 @@ public sealed class KokoroTts : IDisposable
         string text,
         string voiceName,
         float speed,
+        float newLinePause,
         bool saveWav,
         string wavOut,
         string? modelPathForWav = null)
     {
         KokoroRuntime.EnsureVoicesLoaded();
-        var voice = KokoroVoiceManager.GetVoice(string.IsNullOrWhiteSpace(voiceName) ? KokoroRuntime.DefaultVoice : voiceName);
-        var config = new KokoroTTSPipelineConfig { Speed = Math.Clamp(speed, 0.5f, 2f) };
+        var voice = KokoroRuntime.ResolveVoice(voiceName);
+        var config = KokoroRuntime.FastSpeakConfig(speed, newLinePause);
 
         if (saveWav)
         {
             var synthPath = modelPathForWav ?? loadedModelPath;
-            using var synth = KokoroWavSynthesizer.LoadModel(synthPath);
-            var bytes = synth.Synthesize(text, voice, config);
+            var bytes = KokoroRuntime.SynthesizeWav(synthPath, text, voice, config);
             var dir = Path.GetDirectoryName(wavOut);
             if (!string.IsNullOrEmpty(dir))
                 Directory.CreateDirectory(dir);
             KokoroWavSynthesizer.SaveAudioToFile(bytes, wavOut);
             lastWavPath = wavOut;
             lastSpoken = text;
+            playbackActive = false;
             return;
         }
 
         if (engine is null)
             throw new InvalidOperationException("TTS engine is null.");
 
-        var done = new TaskCompletionSource();
-        var handle = engine.SpeakFast(text, voice, config);
-        handle.OnSpeechCompleted += _ => done.TrySetResult();
-        handle.OnSpeechCanceled += _ => done.TrySetResult();
-        if (!done.Task.Wait(TimeSpan.FromMinutes(5)))
-            throw new TimeoutException("SpeakFast did not finish within 5 minutes.");
-        lastSpoken = text;
+        playbackActive = true;
+        var tokens = KokoroRuntime.TokenizeForVoice(text, voice, config.PreprocessText);
+        var handle = engine.Speak_Phonemes(text, tokens, voice, config, fast: true);
+        handle.OnSpeechCompleted += _ =>
+        {
+            lastSpoken = text;
+            playbackActive = false;
+        };
+        handle.OnSpeechCanceled += _ => { playbackActive = false; };
     }
 
     void PollLoad()
@@ -270,12 +297,16 @@ public sealed class KokoroTts : IDisposable
         try
         {
             speakTask.GetAwaiter().GetResult();
-            isSpeaking = false;
-            status = string.IsNullOrEmpty(lastWavPath) ? "Spoken." : "WAV written.";
+            if (!playbackActive)
+            {
+                isSpeaking = false;
+                status = string.IsNullOrEmpty(lastWavPath) ? "Spoken." : "WAV written.";
+            }
             error = "";
         }
         catch (Exception ex)
         {
+            playbackActive = false;
             isSpeaking = false;
             error = Unwrap(ex);
             status = "Speak failed.";
@@ -302,7 +333,8 @@ public sealed class KokoroTts : IDisposable
     {
         try
         {
-            KokoroRuntime.EnsureVoicesLoaded();
+            if (KokoroVoiceManager.Voices.Count == 0)
+                KokoroRuntime.EnsureVoicesLoaded();
             return Spread.Create(KokoroVoiceManager.Voices.Select(v => v.Name).OrderBy(n => n, StringComparer.OrdinalIgnoreCase).ToArray());
         }
         catch

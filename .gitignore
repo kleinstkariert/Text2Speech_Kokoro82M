@@ -18,9 +18,14 @@ lib/voices/
 lib/espeak/
 lib/espeak-ng-data/
 
-# Large ONNX weights (download via scripts/download_model.ps1)
+# Large ONNX weights (download via scripts/download_model.ps1 / download_german_pack.ps1)
 models/*.onnx
 models/*.onnx.tmp
+models/*.npz
+models/*.pt
+models/*.pth
+models/*.msi
+models/espeak-extract/
 
 # Tools
 tools/**/bin/
