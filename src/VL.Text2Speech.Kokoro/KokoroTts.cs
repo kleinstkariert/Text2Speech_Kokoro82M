@@ -167,6 +167,34 @@ public sealed class KokoroTts : IDisposable
         engine.EnqueueJob(KokoroJob.Create(tokens, voice, 1f, _ => done.TrySetResult()));
         if (!done.Task.Wait(TimeSpan.FromSeconds(60)))
             throw new TimeoutException("Kokoro warmup inference timed out.");
+
+        WarmupAudioDevice(engine, voice);
+    }
+
+    /// <summary>
+    /// Forces the internal WaveOutEvent / NAudio device to open during load
+    /// so the first real Speak doesn't lose its opening words to device-init
+    /// latency. Some sound cards need 200-500 ms to open; without this the
+    /// streaming path clips the start of the first utterance.
+    /// </summary>
+    static void WarmupAudioDevice(KokoroTTS engine, KokoroVoice voice)
+    {
+        try
+        {
+            engine.SetVolume(0f);
+            var config = KokoroRuntime.FastSpeakConfig(1f, 0f);
+            var handle = engine.SpeakFast("Warmup.", voice, config);
+            var started = new TaskCompletionSource();
+            handle.OnSpeechStarted += _ => started.TrySetResult();
+            started.Task.Wait(TimeSpan.FromSeconds(5));
+            Thread.Sleep(150);
+            engine.StopPlayback();
+            engine.SetVolume(1f);
+        }
+        catch
+        {
+            try { engine.SetVolume(1f); } catch { }
+        }
     }
 
     void StartSpeak(string text, string voiceName, float speed, float newLinePause)

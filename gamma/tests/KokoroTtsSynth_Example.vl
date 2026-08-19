@@ -1,0 +1,466 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document xmlns:p="property" xmlns:r="reflection" Id="KokoTtsExDoc01" LanguageVersion="2025.7.4" Version="0.128">
+  <NugetDependency Id="OLC6N676ENuMv87XN8XceD" Location="VL.CoreLib" Version="2025.7.4" />
+  <Patch Id="PSnKokoExample01">
+    <Canvas Id="F21KokoCanvas01" DefaultCategory="Main" BordersChecked="false" CanvasType="FullCategory" />
+    <!--
+
+    ************************ Application ************************
+
+-->
+    <Node Name="Application" Bounds="100,100" Id="AppKokoTtsExample1">
+      <p:NodeReference>
+        <Choice Kind="ContainerDefinition" Name="Process" />
+        <CategoryReference Kind="Category" Name="Primitive" />
+      </p:NodeReference>
+      <Patch Id="PatKokoAppInner01">
+        <Canvas Id="CanKokoAppGroup01" CanvasType="Group">
+          <Pad Id="PadModelPath" Comment="Model Path (empty = models\kokoro-fp16.onnx)" Bounds="228,190,420,15" ShowValueBox="true" isIOBox="true" Value="..\..\models\kokoro-fp16.onnx">
+            <p:TypeAnnotation LastCategoryFullName="IO" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="TypeFlag" Name="Path" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Pad Id="PadLoad" Comment="Load" Bounds="273,221,35,35" ShowValueBox="true" isIOBox="true" Value="false">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
+            </p:TypeAnnotation>
+            <p:ValueBoxSettings>
+              <p:buttonmode p:Assembly="VL.UI.Forms" p:Type="VL.HDE.PatchEditor.Editors.ButtonModeEnum">Bang</p:buttonmode>
+            </p:ValueBoxSettings>
+          </Pad>
+          <Node Bounds="504,670,85,19" Id="EwQOHeFCevnLkIuNpEzHEl">
+            <p:NodeReference LastCategoryFullName="Audio.Buffers" LastDependency="VL.Audio.vl">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <Choice Kind="ProcessAppFlag" Name="BufferPlayer" />
+            </p:NodeReference>
+            <Pin Id="BDuMlCgIEezLVKKHiAF0n3" Name="Node Context" Kind="InputPin" IsHidden="true" />
+            <Pin Id="UcogSukm1v8Mxy8e0fU8IN" Name="Buffer" Kind="InputPin" />
+            <Pin Id="BYapbaW0QRnMqSyghyJcUY" Name="Seek Position" Kind="InputPin" />
+            <Pin Id="Hg5GRjJtW5dPtEPI62bhit" Name="Seek" Kind="InputPin" />
+            <Pin Id="ImDzDD4xftGLw8ZUjq4HOl" Name="Speed" Kind="InputPin" />
+            <Pin Id="HfdBKQgYDUoLsEkeBQ16KP" Name="Pay" Kind="InputPin" />
+            <Pin Id="QlcCMWUNlKqOOjlCkb72XO" Name="Output" Kind="OutputPin" />
+            <Pin Id="S27PW9cXCcNMzrVSMqLahM" Name="Current Position" Kind="OutputPin" />
+            <Pin Id="UPLnaMbBVwmQEZambH8gx2" Name="Current Sample" Kind="OutputPin" />
+          </Node>
+          <Node Bounds="504,580,45,19" Id="NtDzh0ZyWXaNqRVwppIwAu">
+            <p:NodeReference LastCategoryFullName="Audio.Buffers" LastDependency="VL.Audio.vl">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <CategoryReference Kind="Category" Name="Buffers" NeedsToBeDirectParent="true" />
+              <Choice Kind="ProcessAppFlag" Name="Buffer" />
+            </p:NodeReference>
+            <Pin Id="ASu7AYMlZPkLKafsSncQ2Z" Name="Node Context" Kind="InputPin" IsHidden="true" />
+            <Pin Id="Hh5j3pIabxxNmBVs4wTJSQ" Name="Size" Kind="InputPin" IsHidden="true" />
+            <Pin Id="CIfmo5FjYLsOzg98OALkk7" Name="Length" Kind="InputPin" />
+            <Pin Id="IODfSD8WCrfMud2YygDJeO" Name="Initial Buffer" Kind="InputPin" />
+            <Pin Id="JljxVEbVgGNO9BBcmerkc6" Name="Initialize" Kind="InputPin" />
+            <Pin Id="UOnPUVhKIKfLiAkhyoYvGA" Name="Output" Kind="StateOutputPin" />
+            <Pin Id="SiYLlir8reIPxJwJhOWITz" Name="Sample Count" Kind="OutputPin" />
+          </Node>
+          <Node Bounds="115,360,205,19" Id="IhgHSdou3YlPYceJp8gsPc">
+            <p:NodeReference LastCategoryFullName="Text2Speech" LastDependency="VL.Text2Speech.Kokoro.dll">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <Choice Kind="ProcessAppFlag" Name="KokoroTtsSynth" />
+            </p:NodeReference>
+            <Pin Id="OEutBNiFY02NIunMs0WSCT" Name="Text" Kind="InputPin" />
+            <Pin Id="CSww4wQo9XBLw8hnGqMDdF" Name="Voice" Kind="InputPin" />
+            <Pin Id="ILupQq5B2wMN9vFDwFJxDQ" Name="Speed" Kind="InputPin" />
+            <Pin Id="O9FPDrp2ps6MlNFhqIhDdJ" Name="New Line Pause" Kind="InputPin" />
+            <Pin Id="ELE6LRm3erjN0R3aDxoGFU" Name="Target Sample Rate" Kind="InputPin" />
+            <Pin Id="GU0gZX0arkOMV9n7zUPtR5" Name="Model Path" Kind="InputPin" />
+            <Pin Id="ExjI0IYo9haQQXqaOOZeOd" Name="Voices Path" Kind="InputPin" />
+            <Pin Id="JgMhinC2jp7PWFnSItkvvt" Name="Load" Kind="InputPin" />
+            <Pin Id="VvFYMPtTJkRPGNLpcwTgI6" Name="Synthesize" Kind="InputPin" />
+            <Pin Id="TrFymrsvYGFPYPLy8IZvoe" Name="Enabled" Kind="InputPin" />
+            <Pin Id="LY7SacYmqaEL47Y37S83Sh" Name="Is Ready" Kind="OutputPin" />
+            <Pin Id="KcIDHrYDm3QLqgk1kX8roQ" Name="Is Loading" Kind="OutputPin" />
+            <Pin Id="T9CPPrGZ2pKLOns6RhvGl6" Name="Is Synthesizing" Kind="OutputPin" />
+            <Pin Id="UxqOIjicEN2MtxQbJRST2Z" Name="New Samples Available" Kind="OutputPin" />
+            <Pin Id="PQG43pB3g9EPVj3EugTDBu" Name="Sample Count" Kind="OutputPin" />
+            <Pin Id="KeJ1O0xJU8kOKfQhs3ry4R" Name="Duration" Kind="OutputPin" />
+            <Pin Id="JwQmOR627UzPHotsJicKne" Name="Samples" Kind="OutputPin" />
+            <Pin Id="IIf3wB4LuYwMlF1CsVzNri" Name="Status" Kind="OutputPin" />
+            <Pin Id="M06nhYHa6AFOhoJ2MFHw0Z" Name="Error" Kind="OutputPin" />
+            <Pin Id="R1II8aisI0OO2zVJOlVOys" Name="Last Spoken" Kind="OutputPin" />
+          </Node>
+          <Pad Id="AWJqKFiAxWwNJz63q8Hbyk" Comment="Text" Bounds="63,111,213,63" ShowValueBox="true" isIOBox="true" Value="one vs 1 - let me know the difference you virtual voice robot!&#xD;&#xA;Badabadabumm.">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="TypeFlag" Name="String" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Pad Id="QNibECMqkIQMk5YPl2q4lP" Comment="Voice" Bounds="139,270,45,15" ShowValueBox="true" isIOBox="true">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="TypeFlag" Name="String" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Pad Id="V5HTDg9cvmsLyWTlhy1nzN" Comment="Speed" Bounds="161,290,35,15" ShowValueBox="true" isIOBox="true" Value="1">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="TypeFlag" Name="Float32" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Pad Id="DGMX44BmBYYOP6iFUkj06b" Comment="Enabled" Bounds="426,310,35,35" ShowValueBox="true" isIOBox="true" Value="True">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
+            </p:TypeAnnotation>
+            <p:ValueBoxSettings>
+              <p:buttonmode p:Assembly="VL.UI.Forms" p:Type="VL.HDE.PatchEditor.Editors.ButtonModeEnum">Toggle</p:buttonmode>
+            </p:ValueBoxSettings>
+          </Pad>
+          <Pad Id="SWfbzGYVxZXLCg3OZacBSB" Comment="Is Ready" Bounds="117,430,35,35" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="UQ9AjCgskz3NxqWq9aPIYJ" Comment="Is Loading" Bounds="139,471,35,35" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="CZpCab91HkqPj1hlIOReor" Comment="Is Synthesizing" Bounds="161,520,35,35" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="HjxMC7I0vnWMrKgM1fg1hb" Comment="New Samples Available" Bounds="184,570,35,35" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="GCCgqI5sKFzNsPSyPeugf8" Comment="Status" Bounds="273,411,118,15" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="Uao1OLaMcxZOnroTDfjk4m" Comment="Last Spoken" Bounds="317,431,98,31" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="PdvuZHrwWmnLvsCvd77uaH" Comment="Synthesize" Bounds="394,221,35,35" ShowValueBox="true" isIOBox="true" Value="false">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
+            </p:TypeAnnotation>
+            <p:ValueBoxSettings>
+              <p:buttonmode p:Assembly="VL.UI.Forms" p:Type="VL.HDE.PatchEditor.Editors.ButtonModeEnum">Bang</p:buttonmode>
+            </p:ValueBoxSettings>
+          </Pad>
+          <Node Bounds="504,840,60,19" Id="CJYU6KBfsZzPsSKDU5cjQF">
+            <p:NodeReference LastCategoryFullName="Audio.Sink" LastDependency="VL.Audio.vl">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <Choice Kind="ProcessAppFlag" Name="AudioOut" />
+            </p:NodeReference>
+            <Pin Id="RSMHk2caTqcNty6EIEbDex" Name="Node Context" Kind="InputPin" IsHidden="true" />
+            <Pin Id="FM9Ez1J5tbbP1SVutBZ9i6" Name="Input" Kind="InputPin" />
+            <Pin Id="CnOCEBGvcEVOlyOvZIO8sA" Name="Channel Offset" Kind="InputPin" />
+          </Node>
+          <Node Bounds="504,800,57,19" Id="Kuq7GRMwszeOjIv8F59Ice">
+            <p:NodeReference LastCategoryFullName="Audio.Utils" LastDependency="VL.Audio.vl">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <Choice Kind="ProcessAppFlag" Name="ToStereo" />
+            </p:NodeReference>
+            <Pin Id="DSRcLzdTCPCN4g7vwFu4nV" Name="Node Context" Kind="InputPin" IsHidden="true" />
+            <Pin Id="UFhN04IuKnWNNfRmwFiqlf" Name="Input" Kind="InputPin" />
+            <Pin Id="COhcd05n3aMPYPgOPiaeuS" Name="Gain" Kind="InputPin" />
+            <Pin Id="DrCTkKrwe7RMIAHuCZScz6" Name="Output" Kind="OutputPin" />
+          </Node>
+          <Pad Id="J4GkQAUHGAqOzEuXCecg73" Comment="Pay" Bounds="586,640,35,35" ShowValueBox="true" isIOBox="true">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
+            </p:TypeAnnotation>
+            <p:ValueBoxSettings>
+              <p:buttonmode p:Assembly="VL.UI.Forms" p:Type="VL.HDE.PatchEditor.Editors.ButtonModeEnum">Toggle</p:buttonmode>
+            </p:ValueBoxSettings>
+          </Pad>
+          <Pad Id="BkD7AI9mn37L4qcmt8gAqf" Comment="Current Sample" Bounds="586,731,65,18" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="Dl8bN28jvktP7jNZ7vv9DG" Comment="Speed" Bounds="566,620,35,15" ShowValueBox="true" isIOBox="true" Value="1">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="TypeFlag" Name="Float32" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Pad Id="Tg7PeMiwFpmOOE2ojhnNTZ" Comment="Current Position" Bounds="546,700,35,15" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="U5siANUHEkWMU0LBI85ZRB" Comment="Sample Count" Bounds="344,660,44,15" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="AncmtfBzAFzLG9e4bmUEwN" Comment="Sample Count" Bounds="206,660,44,15" ShowValueBox="true" isIOBox="true" />
+          <Node Bounds="204,680,143,19" Id="Rc7QwzBSByGQIPEv9rvG9u">
+            <p:NodeReference LastCategoryFullName="Math" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <Choice Kind="OperationCallFlag" Name="=" />
+            </p:NodeReference>
+            <Pin Id="U407rjKYAfLMQFi4IPb64g" Name="Input" Kind="InputPin" />
+            <Pin Id="K5odN8x8tyHQaxyk7rGwtj" Name="Input 2" Kind="InputPin" />
+            <Pin Id="LEIPXDXP5GRLM8pfJLAjQt" Name="Result" Kind="OutputPin" />
+          </Node>
+          <Pad Id="ECBqixH2OtLOidq34t2Eic" Comment="Correctly Loaded_ReadyToPlay" Bounds="174,780,35,35" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="Uv05mV9Ids2OBsNWRoTAOB" Comment="New Line Pause" Bounds="184,310,35,15" ShowValueBox="true" isIOBox="true" Value="0.12">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="TypeFlag" Name="Float32" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Pad Id="Hg4r6eXFn6UNNRYsOYfOFU" Comment="Duration" Bounds="228,391,35,15" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="HsMvuajWvyqLK8b5VyK02B" Comment="Target Sample Rate" Bounds="206,330,38,15" ShowValueBox="true" isIOBox="true" Value="48000">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="TypeFlag" Name="Integer32" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Node Bounds="584,540,65,19" Id="TqGmWG5IxewLp8stTIC9nh">
+            <p:NodeReference LastCategoryFullName="Control" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <Choice Kind="ProcessAppFlag" Name="MonoFlop" />
+            </p:NodeReference>
+            <Pin Id="MNP9wJ3T3l7Ox4lnxLmTzy" Name="Node Context" Kind="InputPin" IsHidden="true" />
+            <Pin Id="PmHMF2Bk6gqLzgGEFjJWvy" Name="Clock" Kind="InputPin" IsHidden="true" />
+            <Pin Id="I8HWCjx4uEmQaSFbUGeVDc" Name="New Clock" Kind="InputPin" IsHidden="true" />
+            <Pin Id="BL7iy6b85aDMLmQ44J2iCv" Name="Set" Kind="InputPin" />
+            <Pin Id="PbyPVuSx647LNLI0QEpXuL" Name="Time" Kind="InputPin" />
+            <Pin Id="LpvKkraXTnHNPkLPjPeb4Y" Name="Retriggerable" Kind="InputPin" />
+            <Pin Id="LVdvx3SLygdPoC6vEebFQM" Name="Reset" Kind="InputPin" />
+            <Pin Id="ItsfCsu6eZtO3Sq2g2562Y" Name="Value" Kind="OutputPin" />
+            <Pin Id="KIdTA2NJ5AeMFwrTHbxIjj" Name="Inverse Output" Kind="OutputPin" />
+          </Node>
+          <Node Bounds="980,80,90,19" Id="CKxWusTBO5UQd12eUWOhY3">
+            <p:NodeReference LastCategoryFullName="Text2Speech" LastDependency="VL.Text2Speech.Kokoro.dll">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <Choice Kind="ProcessAppFlag" Name="KokoroVoiceList" />
+            </p:NodeReference>
+            <Pin Id="SBPqCUFcbvELGZYx8r4ke8" Name="Voices" Kind="OutputPin" />
+            <Pin Id="K3gPKVbiABQLPc6WigPxlT" Name="Count" Kind="OutputPin" />
+            <Pin Id="UFeJeJ6iBomPWr3xIhOWSG" Name="Error" Kind="OutputPin" />
+          </Node>
+          <Pad Id="FoLHYuUooYQPaQ1gQ6LAGB" Comment="Voices" Bounds="982,119,95,533" ShowValueBox="true" isIOBox="true">
+            <p:ValueBoxSettings>
+              <p:maxvisibleentries p:Type="Int32">31</p:maxvisibleentries>
+              <p:showentryindex p:Type="Boolean">true</p:showentryindex>
+              <p:shownonprintablechars p:Type="Boolean">false</p:shownonprintablechars>
+            </p:ValueBoxSettings>
+            <p:Value>
+              <Item>af_alloy</Item>
+              <Item>af_aoede</Item>
+              <Item>af_bella</Item>
+              <Item>af_heart</Item>
+              <Item>af_jessica</Item>
+              <Item>af_kore</Item>
+              <Item>af_maple</Item>
+              <Item>af_nicole</Item>
+              <Item>af_nova</Item>
+              <Item>af_river</Item>
+              <Item>af_sarah</Item>
+              <Item>af_sky</Item>
+              <Item>af_sol</Item>
+              <Item>am_adam</Item>
+              <Item>am_echo</Item>
+              <Item>am_eric</Item>
+              <Item>am_fenrir</Item>
+              <Item>am_liam</Item>
+              <Item>am_michael</Item>
+              <Item>am_onyx</Item>
+              <Item>am_puck</Item>
+              <Item>am_santa</Item>
+              <Item>bf_alice</Item>
+              <Item>bf_emma</Item>
+              <Item>bf_isabella</Item>
+              <Item>bf_lily</Item>
+              <Item>bf_vale</Item>
+              <Item>bm_daniel</Item>
+              <Item>bm_fable</Item>
+              <Item>bm_george</Item>
+              <Item>bm_lewis</Item>
+              <Item>ef_dora</Item>
+              <Item>em_alex</Item>
+              <Item>em_santa</Item>
+              <Item>ff_siwis</Item>
+              <Item>hf_alpha</Item>
+              <Item>hf_beta</Item>
+              <Item>hm_omega</Item>
+              <Item>hm_psi</Item>
+              <Item>if_sara</Item>
+              <Item>im_nicola</Item>
+              <Item>jf_alpha</Item>
+              <Item>jf_gongitsune</Item>
+              <Item>jf_nezumi</Item>
+              <Item>jf_tebukuro</Item>
+              <Item>jm_kumo</Item>
+              <Item>pf_dora</Item>
+              <Item>pm_alex</Item>
+              <Item>pm_santa</Item>
+              <Item>zf_001</Item>
+              <Item>zf_002</Item>
+              <Item>zf_003</Item>
+              <Item>zf_004</Item>
+              <Item>zf_005</Item>
+              <Item>zf_006</Item>
+              <Item>zf_007</Item>
+              <Item>zf_008</Item>
+              <Item>zf_017</Item>
+              <Item>zf_018</Item>
+              <Item>zf_019</Item>
+              <Item>zf_021</Item>
+              <Item>zf_022</Item>
+              <Item>zf_023</Item>
+              <Item>zf_024</Item>
+              <Item>zf_026</Item>
+              <Item>zf_027</Item>
+              <Item>zf_028</Item>
+              <Item>zf_032</Item>
+              <Item>zf_036</Item>
+              <Item>zf_038</Item>
+              <Item>zf_039</Item>
+              <Item>zf_040</Item>
+              <Item>zf_042</Item>
+              <Item>zf_043</Item>
+              <Item>zf_044</Item>
+              <Item>zf_046</Item>
+              <Item>zf_047</Item>
+              <Item>zf_048</Item>
+              <Item>zf_049</Item>
+              <Item>zf_051</Item>
+              <Item>zf_059</Item>
+              <Item>zf_060</Item>
+              <Item>zf_067</Item>
+              <Item>zf_070</Item>
+              <Item>zf_071</Item>
+              <Item>zf_072</Item>
+              <Item>zf_073</Item>
+              <Item>zf_074</Item>
+              <Item>zf_075</Item>
+              <Item>zf_076</Item>
+              <Item>zf_077</Item>
+              <Item>zf_078</Item>
+              <Item>zf_079</Item>
+              <Item>zf_083</Item>
+              <Item>zf_084</Item>
+              <Item>zf_085</Item>
+              <Item>zf_086</Item>
+              <Item>zf_087</Item>
+              <Item>zf_088</Item>
+              <Item>zf_090</Item>
+              <Item>zf_092</Item>
+              <Item>zf_093</Item>
+              <Item>zf_094</Item>
+              <Item>zf_099</Item>
+              <Item>zf_xiaobei</Item>
+              <Item>zf_xiaoni</Item>
+              <Item>zf_xiaoxiao</Item>
+              <Item>zf_xiaoyi</Item>
+              <Item>zm_009</Item>
+              <Item>zm_010</Item>
+              <Item>zm_011</Item>
+              <Item>zm_012</Item>
+              <Item>zm_013</Item>
+              <Item>zm_014</Item>
+              <Item>zm_015</Item>
+              <Item>zm_016</Item>
+              <Item>zm_020</Item>
+              <Item>zm_025</Item>
+              <Item>zm_029</Item>
+              <Item>zm_030</Item>
+              <Item>zm_031</Item>
+              <Item>zm_033</Item>
+              <Item>zm_034</Item>
+              <Item>zm_035</Item>
+              <Item>zm_037</Item>
+              <Item>zm_041</Item>
+              <Item>zm_045</Item>
+              <Item>zm_050</Item>
+              <Item>zm_052</Item>
+              <Item>zm_053</Item>
+              <Item>zm_054</Item>
+              <Item>zm_055</Item>
+              <Item>zm_056</Item>
+              <Item>zm_057</Item>
+              <Item>zm_058</Item>
+              <Item>zm_061</Item>
+              <Item>zm_062</Item>
+              <Item>zm_063</Item>
+              <Item>zm_064</Item>
+              <Item>zm_065</Item>
+              <Item>zm_066</Item>
+              <Item>zm_068</Item>
+              <Item>zm_069</Item>
+              <Item>zm_080</Item>
+              <Item>zm_081</Item>
+              <Item>zm_082</Item>
+              <Item>zm_089</Item>
+              <Item>zm_091</Item>
+              <Item>zm_095</Item>
+              <Item>zm_096</Item>
+              <Item>zm_097</Item>
+              <Item>zm_098</Item>
+              <Item>zm_100</Item>
+              <Item>zm_yunjian</Item>
+              <Item>zm_yunxi</Item>
+              <Item>zm_yunxia</Item>
+              <Item>zm_yunyang</Item>
+            </p:Value>
+          </Pad>
+          <Pad Id="UOwewitzABMOQwLEG43qq1" Comment="Play" Bounds="586,500,35,35" ShowValueBox="true" isIOBox="true" Value="false">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
+            </p:TypeAnnotation>
+            <p:ValueBoxSettings>
+              <p:buttonmode p:Assembly="VL.UI.Forms" p:Type="VL.HDE.PatchEditor.Editors.ButtonModeEnum">Bang</p:buttonmode>
+            </p:ValueBoxSettings>
+          </Pad>
+          <Node Bounds="159,680,37,19" Id="J4ul7uc47YHPXoDSdedRpH">
+            <p:NodeReference LastCategoryFullName="Primitive.Boolean" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <Choice Kind="OperationCallFlag" Name="NOT" />
+            </p:NodeReference>
+            <Pin Id="HulSWOoDPowMrLk8SwJv5v" Name="Input" Kind="StateInputPin" />
+            <Pin Id="B0NAyJsuE8BPCKrv8REtGE" Name="Output" Kind="StateOutputPin" />
+          </Node>
+          <Node Bounds="172,720,37,19" Id="PYVrSb3nWllO6Ls8lcH9I1">
+            <p:NodeReference LastCategoryFullName="Primitive.Boolean" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <Choice Kind="OperationCallFlag" Name="AND" />
+            </p:NodeReference>
+            <Pin Id="CHyvZqgheqwLsz7QXDAfpA" Name="Input" Kind="StateInputPin" />
+            <Pin Id="IxIpXBdiZMaLvaUkfQftx5" Name="Input 2" Kind="InputPin" />
+            <Pin Id="JKX7ZOv3UsYPV4JJPCVeki" Name="Output" Kind="StateOutputPin" />
+          </Node>
+          <Pad Id="KOPQ6jITekJOGdRPwVeAUn" Comment="" Bounds="390,960,190,132" ShowValueBox="true" isIOBox="true" />
+          <Node Bounds="838,240,52,19" Id="FCSvJoXOMzFNLroRtKR8H0">
+            <p:NodeReference LastCategoryFullName="Collections.Spread" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <CategoryReference Kind="RecordType" Name="Spread" NeedsToBeDirectParent="true" />
+              <Choice Kind="OperationCallFlag" Name="GetSlice" />
+            </p:NodeReference>
+            <Pin Id="Ol2kXIitlA2Ok1v44c8nXI" Name="Input" Kind="StateInputPin" />
+            <Pin Id="HakmVeF5n0ML49bZmUa6pv" Name="Default Value" Kind="InputPin" />
+            <Pin Id="RkEzLxUMisRPfwGkK8d0qd" Name="Index" Kind="InputPin" />
+            <Pin Id="Bf1ZfZ3aSeAMLjzgupN1nV" Name="Result" Kind="OutputPin" />
+          </Node>
+          <Pad Id="SsmzKrXlaQcOzrTgmCBS6f" Comment="Index" Bounds="887,220,35,15" ShowValueBox="true" isIOBox="true" Value="30">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="TypeFlag" Name="Integer32" />
+            </p:TypeAnnotation>
+          </Pad>
+        </Canvas>
+        <Patch Id="PatKokoCreate01" Name="Create" />
+        <Patch Id="PatKokoUpdate01" Name="Update" />
+        <ProcessDefinition Id="PrcKokoAppDef01">
+          <Fragment Id="FrgKokoCreate01" Patch="PatKokoCreate01" Enabled="true" />
+          <Fragment Id="FrgKokoUpdate01" Patch="PatKokoUpdate01" Enabled="true" />
+        </ProcessDefinition>
+        <Link Id="ORhpzBAJ2CePgSW0lm2Bki" Ids="AWJqKFiAxWwNJz63q8Hbyk,OEutBNiFY02NIunMs0WSCT" />
+        <Link Id="EnumYDm6nfBOAFC1foQnO9" Ids="QNibECMqkIQMk5YPl2q4lP,CSww4wQo9XBLw8hnGqMDdF" />
+        <Link Id="HPnNE6KC2wCNqZk32W5YCI" Ids="V5HTDg9cvmsLyWTlhy1nzN,ILupQq5B2wMN9vFDwFJxDQ" />
+        <Link Id="L9xjSz4PelzQHpNPNUTaeK" Ids="PadModelPath,GU0gZX0arkOMV9n7zUPtR5" />
+        <Link Id="TdjKPMOvWunM7XRuJMlIgS" Ids="PadLoad,JgMhinC2jp7PWFnSItkvvt" />
+        <Link Id="T7a1Q84tLtZM2jWp3Lxfes" Ids="DGMX44BmBYYOP6iFUkj06b,TrFymrsvYGFPYPLy8IZvoe" />
+        <Link Id="AnvmgYwy8xGLzq4WPhWeg3" Ids="LY7SacYmqaEL47Y37S83Sh,SWfbzGYVxZXLCg3OZacBSB" />
+        <Link Id="CJlCSYZoMqVO3Qinb5xG8V" Ids="KcIDHrYDm3QLqgk1kX8roQ,UQ9AjCgskz3NxqWq9aPIYJ" />
+        <Link Id="LWD9C39gx4GPSJCulKWZgc" Ids="T9CPPrGZ2pKLOns6RhvGl6,CZpCab91HkqPj1hlIOReor" />
+        <Link Id="M0TiWB22H2BNJuXmq7DdUi" Ids="UxqOIjicEN2MtxQbJRST2Z,HjxMC7I0vnWMrKgM1fg1hb" />
+        <Link Id="Q1sMsrV9JIwLV34xm3Pj4j" Ids="IIf3wB4LuYwMlF1CsVzNri,GCCgqI5sKFzNsPSyPeugf8" />
+        <Link Id="K69BTSgyxpePoa7l7ER66I" Ids="R1II8aisI0OO2zVJOlVOys,Uao1OLaMcxZOnroTDfjk4m" />
+        <Link Id="AqjVDRhUAbzQHoe1sSAw3J" Ids="PdvuZHrwWmnLvsCvd77uaH,VvFYMPtTJkRPGNLpcwTgI6" />
+        <Link Id="Gwx3Q3nz59sOQ7sxrm6H77" Ids="UOnPUVhKIKfLiAkhyoYvGA,UcogSukm1v8Mxy8e0fU8IN" />
+        <Link Id="A7gjAF3Va2jM3kiuPOB1Xf" Ids="QlcCMWUNlKqOOjlCkb72XO,UFhN04IuKnWNNfRmwFiqlf" />
+        <Link Id="LQQJS1w6tUnLAe1oVVvBMy" Ids="DrCTkKrwe7RMIAHuCZScz6,FM9Ez1J5tbbP1SVutBZ9i6" />
+        <Link Id="DlrE7aOlgfNNRB87LyNlqt" Ids="J4GkQAUHGAqOzEuXCecg73,HfdBKQgYDUoLsEkeBQ16KP" />
+        <Link Id="OopXt0u5UCgQQaUHBZ1gzH" Ids="UPLnaMbBVwmQEZambH8gx2,BkD7AI9mn37L4qcmt8gAqf" />
+        <Link Id="K7lmCT1gi21N2LEUw6LF1s" Ids="JwQmOR627UzPHotsJicKne,IODfSD8WCrfMud2YygDJeO" />
+        <Link Id="KWuUNhpWfLcOEJyt85RU9H" Ids="Dl8bN28jvktP7jNZ7vv9DG,ImDzDD4xftGLw8ZUjq4HOl" />
+        <Link Id="Q189ALy5aaiPjnaCouKPO6" Ids="S27PW9cXCcNMzrVSMqLahM,Tg7PeMiwFpmOOE2ojhnNTZ" />
+        <Link Id="LzcQYP7qSOgLeUH7Fz49BB" Ids="SiYLlir8reIPxJwJhOWITz,U5siANUHEkWMU0LBI85ZRB" />
+        <Link Id="SQJivHMFhBOMjO89RZaAHW" Ids="PQG43pB3g9EPVj3EugTDBu,AncmtfBzAFzLG9e4bmUEwN" />
+        <Link Id="KyrjKoZky2ANlEL3dK2SJO" Ids="AncmtfBzAFzLG9e4bmUEwN,U407rjKYAfLMQFi4IPb64g" />
+        <Link Id="KVlz1R1ZWDQNKWSEuGPnJG" Ids="U5siANUHEkWMU0LBI85ZRB,K5odN8x8tyHQaxyk7rGwtj" />
+        <Link Id="L7qP8MtqbiZPNQb2XctZ5n" Ids="Uv05mV9Ids2OBsNWRoTAOB,O9FPDrp2ps6MlNFhqIhDdJ" />
+        <Link Id="IixoC2bSlLlLgg2bowMrqi" Ids="KeJ1O0xJU8kOKfQhs3ry4R,Hg4r6eXFn6UNNRYsOYfOFU" />
+        <Link Id="TuNNBa8XAPXP3oxBgbvP7J" Ids="HsMvuajWvyqLK8b5VyK02B,ELE6LRm3erjN0R3aDxoGFU" />
+        <Link Id="AKN0OERSQGMNZRmXJPB73n" Ids="KeJ1O0xJU8kOKfQhs3ry4R,PbyPVuSx647LNLI0QEpXuL" />
+        <Link Id="BhModugiMLDPbeff7uxVPO" Ids="ItsfCsu6eZtO3Sq2g2562Y,J4GkQAUHGAqOzEuXCecg73" />
+        <Link Id="M2f4YChIx1aQZWpofDrioN" Ids="SBPqCUFcbvELGZYx8r4ke8,FoLHYuUooYQPaQ1gQ6LAGB" />
+        <Link Id="C9pYCmrPjLYPZWmvMQhA55" Ids="UxqOIjicEN2MtxQbJRST2Z,JljxVEbVgGNO9BBcmerkc6" />
+        <Link Id="O1seTodYmHuOogUZdK4Vg9" Ids="UOwewitzABMOQwLEG43qq1,BL7iy6b85aDMLmQ44J2iCv" />
+        <Link Id="JzaXCdFpzMlP5AaINOB4EX" Ids="UOwewitzABMOQwLEG43qq1,Hg5GRjJtW5dPtEPI62bhit" />
+        <Link Id="DFpOkXnMBQ1LNZymYOU3Sz" Ids="LEIPXDXP5GRLM8pfJLAjQt,IxIpXBdiZMaLvaUkfQftx5" />
+        <Link Id="B0fNXqwB9u7PkxYNtTRuwy" Ids="B0NAyJsuE8BPCKrv8REtGE,CHyvZqgheqwLsz7QXDAfpA" />
+        <Link Id="MUNeuOyMqAnNh7XzJOJrAt" Ids="JKX7ZOv3UsYPV4JJPCVeki,ECBqixH2OtLOidq34t2Eic" />
+        <Link Id="RDg5uyhpgRcP4wANwjWxak" Ids="CZpCab91HkqPj1hlIOReor,HulSWOoDPowMrLk8SwJv5v" />
+        <Link Id="PcPqOsFhnefNVz9l2bkUuP" Ids="DrCTkKrwe7RMIAHuCZScz6,KOPQ6jITekJOGdRPwVeAUn" />
+        <Link Id="NCkAHtV6fJFL2OG1Ilws1J" Ids="SBPqCUFcbvELGZYx8r4ke8,Ol2kXIitlA2Ok1v44c8nXI" />
+        <Link Id="KDXRLVuLEY8N1pa6JZPRZH" Ids="SsmzKrXlaQcOzrTgmCBS6f,RkEzLxUMisRPfwGkK8d0qd" />
+        <Link Id="BFfvqmanntYNYXrurquapH" Ids="Bf1ZfZ3aSeAMLjzgupN1nV,QNibECMqkIQMk5YPl2q4lP" />
+      </Patch>
+    </Node>
+  </Patch>
+  <PlatformDependency Id="DepKokoTtsDll01" Location="../../lib/VL.Text2Speech.Kokoro.dll" />
+  <NugetDependency Id="FlBNld40wa9NjC1AfP9eFf" Location="VL.Audio" Version="1.9.19" />
+</Document>
